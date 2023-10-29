@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <!-- Resto de las etiquetas head -->
+    <link rel="stylesheet" href="cssSub/styleSub1.css" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Luz Solar</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/p5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body {
+        background-image: url(imagenes/fondo.jpg);
+        background-attachment: fixed;
+        background-size: cover; /* Ajusta el tamaño de la imagen para cubrir todo el fondo */
+        background-repeat: no-repeat; /* Evita que la imagen se repita */
+        image-rendering: pixelated; /* Agrega nitidez a la imagen */
+        background-color: rgba(0, 0, 0, 0.7); /* Color semi-transparente, ajusta el último valor según lo desees */
+
+        /* Ajusta el tamaño del contenedor para que ocupe toda la ventana */
+        width: 100vw;
+        height: 100vh;
+        /* Centra el contenido verticalmente */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      /* Estilo adicional para el contenedor principal */
+      .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap:5px; /* Espacio entre las partes */
+        margin-top: 10px;
+      }
+
+      /* Estilo para la clase subGrafica (PARTE1) */
+      .subGrafica {
+        /* Estilos adicionales para centrar el contenido */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .boton{
+        font-family:Georgia, 'Times New Roman', Times, serif;
+        margin-right: 20px;
+      }
+
+      .fechas{
+        margin-top: 170px;
+        margin-left: -300px;
+      }
+
+      
+      /* Estilo para el botón */
+      .boton {
+        padding: 10px 20px;
+        background-color: #c8b012;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease;
+        margin-left: 10px;
+        margin-top:40px;
+      }
+
+      .boton:hover {
+        background-color: #0056b3;
+      }
+
+      .boton:focus {
+        outline: none;
+        background-color: #0056b3;
+        box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+      }
+
+      .boton:active {
+        background-color: #004282;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        transform: translateY(1px);
+      }
+
+
+        /* Estilo para el contenedor de las fechas */
+        .fechas {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+      }
+
+      /* Estilo para las etiquetas de las fechas */
+      .fechas label {
+        font-size: 16px;
+        color: #fff;
+      }
+
+      /* Estilo para los inputs de las fechas */
+      .fechas input[type="date"] {
+        padding: 10px;
+        border: 2px solid #c8b012;
+        border-radius: 8px;
+        font-size: 16px;
+        color: #333;
+        background-color: #f2f2f2;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Estilo para los inputs de las fechas al estar enfocados */
+      .fechas input[type="date"]:focus {
+        outline: none;
+        border-color: #007bff;
+      } 
+  </style>
+  </head>
+  <body>
+    <div class="container">
+      <!--PARTE1-->
+      <div class="subGrafica">
+        <div class="card-body">
+<!---  <iframe width="600" height="600" src="subLuzSolar.html"></iframe>     ---> 
+        </div>
+      </div>
+      <!-- FIN PARTE1 -->
+
+      <!-- PARTE2 -->
+      <div class="fechas">
+        <label for="start-date">Fecha de inicio:</label>
+        <input type="date" id="start-date" name="start-date" />
+        <label for="end-date">Fecha de fin:</label>
+        <input type="date" id="end-date" name="end-date" />
+        <!-- Botón -->
+        <script>
+          function myFuncion(){
+          console.log("ya me aburri");
+        } 
+
+        
+      </script>
+      <div><button class="boton" id="get-grafico" >Obtener gráfico</button></div>
+
+        <script>
+        const datos = []
+          document
+            .getElementById("start-date")
+            .addEventListener("change", (event) => {
+              console.log(event.target.value);
+              datetime_start = event.target.value;
+              //draw_function(datetime_start, datetime_end);
+            });
+
+            document.getElementById("end-date").addEventListener("change", (event) => {
+              console.log(event.target.value);
+              datetime_end = event.target.value;
+              //draw_function(datetime_start, datetime_end);
+            });
+
+            document.getElementById("get-grafico").addEventListener("click", async () => {
+            const startDate = document.getElementById("start-date").value;
+            const endDate = document.getElementById("end-date").value;
+
+            const requestData = {
+              startDate: startDate,
+              endDate: endDate
+            };
+
+            try {
+              const response = await fetch("http://localhost:3000/lumen_getHistorial", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify(requestData)
+              });
+
+              if (response.ok) {
+                const data = await response.json();
+                // Aquí puedes procesar los datos de la respuesta como desees
+                //console.log(data[0].Value);
+                contador=0;
+                for (const item of data) {
+                    console.log(data[contador].Value);
+                    datos.push(data[contador].Value)
+                    contador++;
+                }
+              } else {
+                console.error("Error en la solicitud:", response.status);
+              }
+            } catch (error) {
+              console.error("Error:", error);
+            }
+
+            //onclick="graficar()"
+            graficar();
+          });
+        </script>
+        </div>
+      </div>
+      <!-- FIN PARTE2 -->
+    </div>
+      <div>
+        <canvas id="grafica" width="800" height="400"></canvas>
+        </div>
+          <script>
+
+               // Arreglo de datos (puedes modificar estos valores)
+                //const datos = [10, 25, 30, 15, 50, 40, 5, 13, 28, 27, 34, 24, 90];
+                let chartInstance = null; // Almacenar la instancia de la gráfica
+
+                function graficar() {
+                  console.log(datos)
+                    if (!chartInstance) {
+                      const ctx = document.getElementById('grafica').getContext('2d');
+                      chartInstance = new Chart(ctx, {
+                        type: 'scatter', // Cambio de tipo de gráfico a 'scatter'
+                        data: {
+                          labels: datos.map((_, index) => `Dato ${index + 1}`),
+                          datasets: [{
+                            label: 'Luz Solar(Lumen)',
+                            data: datos.map((value, index) => ({ x: index + 1, y: value })), // Datos en formato de puntos
+                            borderColor: 'rgba(75, 192, 192, 1)', // Color del borde de los puntos
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)', // Color del relleno de los puntos
+                            pointRadius: 1 // Tamaño de los puntos
+                          }]
+                        },
+                        options: {
+                          responsive: true,
+                          maintainAspectRatio: false
+                        }
+                      });
+                    }
+                  }
+
+                // // Función para actualizar los datos de la gráfica
+                // function actualizarGrafica(newData) {
+                //   if (chartInstance) {
+                //     chartInstance.data.datasets[0].data = newData;
+                //     chartInstance.update();
+                //   }
+                // }
+
+          </script>
+      </div>
+  </body>
+</html>

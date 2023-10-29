@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/p5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <canvas id="sun-chart" width="900" height="800"></canvas>
+    <script>
+      let pressure = 0;
+      let tempData = []; // Variable para almacenar los datos de temperatura
+      let chart;
+
+      //-----------------Comunicación con el backend---------------VER ESTA
+      const interval_function = () => {
+        const url = "http://localhost:3000";
+        fetch(`${url}/lumen_get`)
+          .then((res) => {
+            if (res.status === 200) {
+              return res.json();
+            } else {
+              throw new Error("Something went wrong on api server!");
+            }
+          })
+          .then((response) => {
+            //--------Mando a graficar conforme vaya obteniendo los datos-------
+            tempData.push(int(response[0].Value));//añado un push a la lista utilizada
+            if (tempData.length > 50) {
+              tempData.shift();
+            }
+            updateChart(tempData);
+            //pressure = response[0].value;
+            console.log("Dato luz: ", int(response[0].Value))
+            pressure = response[0].value;
+          });
+      };
+
+      //----------------Función para crear la graficar-------------
+      function setup() {
+        createCanvas(500, 500);
+        background(220);
+
+        //cargando imagen
+        sunImg = loadImage("imagenes/sol.png");
+        
+        // Inicializando la gráfica
+        chart = createChart(); // Crear la gráfica
+
+        //obteniendo los datos del backend y actualizando la gráfica
+        setInterval(fetchLuzDataAndUpdateChart, 5000);
+      }
+
+  // Función para obtener datos de temperatura del backend y actualizar la gráfica---- VER ESTA
+      function fetchLuzDataAndUpdateChart() {
+        fetch('/getLuzData')
+            .then(response => response.json())
+            .then(data => {
+                tempData.push(data.temperature);
+                if (tempData.length > 50) {
+                    tempData.shift();
+                }
+                updateChart(tempData);
+            })
+            .catch(error => console.error('Error fetching data:', error));
+      }
+      //----dibujando
+      function draw() {
+        clear();
+        //fill background in gray
+        fill(227, 227, 227);
+        smooth();
+
+        image(sunImg, 260, 1, 100, 100);
+        // Obtener el valor de temperatura actual y agregarlo a los datos
+        let currentTemp = temp; // Asumiendo que temp es la temperatura actual obtenida de alguna fuente
+        tempData.push(currentTemp);
+
+        // Limitar el número de puntos de datos mostrados para mantener la gráfica dinámica
+        if (tempData.length > 50) {
+          tempData.shift(); // Eliminar el primer punto de datos para mantener el límite
+        }
+
+        // Actualizar los datos de la gráfica
+        updateChart(tempData);
+
+        //define stroke
+        stroke(0, 0, 0);
+        strokeWeight(2);
+
+        fill(0, 0, 0);
+
+        //draw font
+        textFont("sans-serif", 20);
+        text("Luz solar", 35, 330);
+
+        text(`${pressure} hPa`, 35, 360);
+      }
+
+      function createChart() {
+      return new Chart(document.getElementById('sun-chart'), {
+        type: 'line',
+        data: {
+          labels: [], // Etiquetas del eje x (vacías al principio)
+          datasets: [{
+            label: 'Luz Solar (Lumen)',
+            data: [], // Datos de temperatura (vacíos al principio)
+            borderColor: 'rgba(75, 192, 192, 0.2)',
+            backgroundColor: 'rgba(75, 10, 100, 0.6)',
+            borderWidth: 1,
+            fill: true
+          }]
+        },
+        options: {
+          scales: {
+            x: {
+              display: true
+            },
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    function updateChart(data) {
+      chart.data.labels = data.map((_, index) => index); // Etiquetas del eje x (números consecutivos)
+      chart.data.datasets[0].data = data; // Datos de temperatura
+      chart.update(); // Actualizar la gráfica
+    }
+
+      setInterval(interval_function, 5000);
+    </script>
+  </head>
+  <body></body>
+</html>

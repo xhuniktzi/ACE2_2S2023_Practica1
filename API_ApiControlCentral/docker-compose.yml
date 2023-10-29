@@ -1,0 +1,26 @@
+services: 
+  ace2_db:
+    restart: on-failure
+    container_name: ace2_db
+    command: --default-authentication-plugin=mysql_native_password --sql_mode="" --event-scheduler=ON
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    networks:
+      - ace2_net
+    volumes:
+      - ace2-vol:/var/lib/mysql
+      - ./db_init.sql:/docker-entrypoint-initdb.d/db_init.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: ace2p1
+      MYSQL_PASSWORD: ace2p1
+      MYSQL_DATABASE: meteorology
+    
+
+networks:
+  ace2_net:
+    driver: bridge
+
+volumes:
+  ace2-vol:

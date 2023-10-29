@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Análisis Meteorológica</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      iframe {
+        border: none;
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- INICIO NAV BAR HORIZONTAL -->
+    <div class="container-scroller">
+      <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+          <a class="navbar-brand brand-logo mr-20">
+          <p class="holi">Análisis Meteorológica<img src="graphs/imagenes/met.png" alt="Meteorológica"/></p>
+          </a>
+        </div>
+      </nav>
+    </div>
+    <!-- FIN NAV BAR HORIZONTAL -->
+
+
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <!-- INICIO CONTENEDOR DE TEXTO -->
+
+          <!-- INICIO DE CARD-->
+          <div class="row">
+            <div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title">Temperatura</p>
+                  <div class="container">
+        
+                <div class="sin-overflow">
+                  <iframe class="frame2"
+                  width="500"
+                  height="550"
+                  src="graphs/Temperatura.html"
+                  ></iframe>
+                </div>
+              </div>
+                  <div><button class="botonPrincipal2" onclick="window.location.href = './graphs/grafBefTempe.html';">Datos Recolectados</button></div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title">Luz solar</p>
+                  <iframe
+                    width="500"
+                    height="550"
+                    src="graphs/LuzSolar.html"
+                  ></iframe>
+                  <div><button class="botonPrincipal2" onclick="window.location.href = './graphs/grafBef.html';">Datos Recolectados</button></div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- FIN CARD -->
+
+          <!-- INICIO DE CARD-->
+          <div class="row">
+            <div class="col-md-6 grid-margin stretch-card">
+              <div
+                class="card"
+                >
+                <div class="card-body">
+                  <p class="card-title">Humedad</p>
+                  <iframe
+                    width="500"
+                    height="500"
+                    src="graphs/humedad.html"
+                  ></iframe>
+                  <div><button class="botonPrincipal2" onclick="window.location.href = './graphs/grafBefHum.html';">Datos Recolectados</button></div>
+
+              </div>
+            </div>
+
+            <div class="col-md-6 grid-margin stretch-card">
+              <div
+                class="card"
+              >
+                <div class="card-body">
+                  <p class="card-title">Cantidad de viento</p>
+                  <iframe
+                    width="500"
+                    height="500"
+                    src="graphs/Aire.html"
+                  ></iframe>
+                </div>
+                <div><button class="botonPrincipal2" onclick="window.location.href = './graphs/grafBefAire.html';">Datos Recolectados</button></div>
+
+              </div>
+            </div>
+          </div>
+          <!-- FIN CARD -->
+
+          <!-- FIN CONTENEDOR DE TEXTO -->
+        </div>
+      </div>
+      <!--FIN CONTENEODR GLOBAL-->
+    </div>
+  </body>
+</html>

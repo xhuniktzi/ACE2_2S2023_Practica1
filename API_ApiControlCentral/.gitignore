@@ -1,0 +1,30 @@
+# Dependencias
+/node_modules
+
+# Archivos generados por npm
+npm-debug.log
+yarn-error.log
+
+# Archivos generados por IDEs o editores de texto
+.vscode/
+.idea/
+
+# Archivos de configuración
+config.json
+
+# Archivos de logs
+logs/
+
+# Archivos temporales o generados en tiempo de ejecución
+*.log
+*.tmp
+*.pid
+*.seed
+*.pid.lock
+
+# Archivos de compilación o build
+/dist/
+/build/
+
+# Dependiendo del framework o librería que uses, puede que haya más archivos o directorios que quieras ignorar. Asegúrate de agregar aquí cualquier archivo o carpeta generada por el proceso de construcción o dependiente de tu entorno de desarrollo específico.
+.env
